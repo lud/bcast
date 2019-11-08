@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+    <Script file="Bcast.lua"/>
+    <Frame name="Bcast_Frame" frameStrata="HIGH" parent="UIParent" movable="true">
+        <Size>
+            <AbsDimension x="100" y="100"/>
+        </Size>
+        <Anchors>
+            <Anchor point="TOP">
+
+            </Anchor>
+        </Anchors>
+        <Scripts>
+            <OnLoad>Bcast_OnLoad(self);</OnLoad>
+            <OnEvent>Bcast_OnEvent(self, event, ...);</OnEvent>
+        </Scripts>
+        <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+            <TileSize>
+                <AbsValue val="16"/>
+            </TileSize>
+            <EdgeSize>
+                <AbsValue val="16"/>
+            </EdgeSize>
+            <BackgroundInsets>
+                <AbsInset left="4" right="3" top="4" bottom="3"/>
+            </BackgroundInsets>
+            <Color r="0.2" g="0.2" b="0.2" a="0.7"/>
+        </Backdrop>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString name="$parent_TitleText" inherits="GameFontNormalSmall" justifyH="CENTER" text="Broadcasts">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="-10" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+
+                <FontString name="$parent_BottomText" inherits="GameFontNormalSmall" justifyH="CENTER" text="---">
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="0" y="10" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button inherits="UIPanelButtonTemplate" name="$parent_TargetButton" text="Target">
+                <Size x="50" y="20"/>
+                <Anchors>
+                    <Anchor point="CENTER"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>Bcast_BroadcastTarget();</OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>
