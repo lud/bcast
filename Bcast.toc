@@ -2,4 +2,5 @@
 ## Title: Bcast
 ## Author: Drone
 ## Version: 0.1
+## SavedVariables: Bcast_Broadcasts
 Bcast.xml

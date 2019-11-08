@@ -33,14 +33,15 @@ local EMPTY_SLOT = "__EMPTY__"
 
 local handlers = {}
 local errcolor = "|cffff5555"
-local Bcast_Broadcasts = {}
+Bcast_Broadcasts = {}
 -- lua tables cannot handle nil values so we use EMPTY_SLOT as "empty"
 -- value
--- In dev env, we use a saved variable of broadcasts so we must check 
--- if the broadcasts are nil before overwriting
 for i = 1,MAX_BROADCASTS do 
-    if nil == Bcast_Broadcasts[i]
-    Bcast_Broadcasts[i] = EMPTY_SLOT 
+    -- Bcast_Broadcasts is a saved variable (@todo only in dev)
+    -- so we check for nil before initializing
+    if nil == Bcast_Broadcasts[i] then
+        Bcast_Broadcasts[i] = EMPTY_SLOT 
+    end
 end
 local bcast_buttons = {}
 
@@ -123,11 +124,16 @@ function Broadcast.create(type, unit_type, unit_guid, unit_name)
     bcast.unit_type = unit_type
     bcast.unit_guid = unit_guid
     bcast.unit_name = unit_name
+    bcast.time_at = 0
     return bcast
 end
 
 function Broadcast.from_message(msg)
     return Broadcast.create(unpack(unserialize_message(msg)))
+end
+
+function Broadcast:set_time(t)
+    self.time_at = t
 end
 
 function Broadcast:to_message()
@@ -252,7 +258,10 @@ function Bcast_BroadcastTarget()
 end
 
 function handlers:PLAYER_ENTERING_WORLD(...)
+    -- restore state from saved variables
+    update_item_buttons()
     print("Bcast initialized")
+    tprint(Bcast_Broadcasts)
 end
 
 function handlers:CHAT_MSG_ADDON(event, prefix, text, channel,sender,target,zoneChannelID,localID,name,instanceID)
@@ -263,7 +272,8 @@ function handlers:CHAT_MSG_ADDON(event, prefix, text, channel,sender,target,zone
         print("received message = " .. text)
         
         local bcast = Broadcast.from_message(text)
-        ioinspect(bcast, "bcast")
+        bcast:set_time(time())
+        ioinspect(bcast, "broadcast")
         push_broadcast(bcast)
         update_item_buttons()
         -- if starts_with(text, TARGET_PREFIX) then
