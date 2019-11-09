@@ -229,7 +229,7 @@ Broadcast.__index = Broadcast
 
 
 function Broadcast.create(type, unit_type, unit_guid, unit_class, unit_name)
-    local bcast = {version = VERSION}
+    local bcast = {}
     setmetatable(bcast,  Broadcast)
     bcast.type = type
     bcast.unit_type = unit_type
@@ -378,6 +378,8 @@ function Bcast_BroadcastTarget()
         -- <broadcast_type>:<player/npc>:<guid>:<class>:<name>
         -- we will save in the broadcast wether the unit is a player
         -- or not.
+        -- WARNING : disconnected players are not "controlled"
+        -- @todo try with mind controlled NPCs
         local player_or_npc = UnitPlayerControlled("target") and UNIT_TYPE_PLAYER or UNIT_TYPE_NPC
         -- in the same way, we will add the class and the name of the
         -- unit so we can show them for clients that have not
@@ -438,3 +440,15 @@ end
 function handlers:PLAYER_REGEN_ENABLED()
     OOC:resume()
 end
+
+-- Slash commands
+SLASH_BCAST1 = "/bcast"
+SLASH_BCAST2 = "/broadcast"
+SlashCmdList["BCAST"] = function(cmd)
+   if "target" == cmd then
+    Bcast_BroadcastTarget()
+   else
+    printerr("Unknown command " .. cmd)
+    print("Usage\n  \'/bcast target' to broadcast your current target")
+   end
+end 
