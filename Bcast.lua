@@ -1,6 +1,5 @@
 -- Constants
 
-local VERSION = 1
 local ERRCOLOR = "|cffff5555"
 local CHAN_PREFIX_BROADCAST = "BCAST_BROADCAST"
 local MAX_MESSAGE_LENGTH = 255 - #CHAN_PREFIX_BROADCAST - 1
@@ -20,7 +19,7 @@ local UNIT_CLASSES = {
      "SHAMAN",
      "MAGE",
      "WARLOCK",
-     "DRUID", 
+     "DRUID",
 }
 
 local UNIT_TYPE_NPC = "n"
@@ -216,6 +215,7 @@ end
 -- initial calling scope cannot catch any error, so we catch errors and print
 -- them
 function OOC:_run(fn)
+    -- @todo use xpcall
     local status, err = pcall(fn)
     if not status then
         printerr(tostring(err))
@@ -314,7 +314,7 @@ local function create_item_buttons()
 end
 
 local function update_item_buttons()
-    OOC:run("update_item_buttons", function()     
+    OOC:run("update_item_buttons", function()
         for i = 1, MAX_BROADCASTS do
             local bcast = broadcasts_store[i]
             local bt = bcast_buttons[i]
@@ -354,7 +354,8 @@ end
 
 -- Init
 function Bcast_OnLoad()
-	for k, _ in pairs(handlers) do
+    for k, _ in pairs(handlers) do
+        print("register " .. k)
 		Bcast_Frame:RegisterEvent(k)
     end
 
@@ -363,7 +364,8 @@ function Bcast_OnLoad()
 end
 
 function Bcast_OnEvent(self, event, ...)
-	handlers[event](self, event, ...)
+    print("handle " .. tostring(event))
+	handlers[event](event, ...)
 end
 
 function Bcast_BroadcastTarget()
@@ -403,7 +405,7 @@ function Bcast_BroadcastTarget()
     end
 end
 
-function handlers:PLAYER_ENTERING_WORLD()
+function handlers.PLAYER_ENTERING_WORLD()
     -- restore state from saved variables
     tprint(broadcasts_store)
     update_item_buttons()
@@ -412,7 +414,7 @@ function handlers:PLAYER_ENTERING_WORLD()
     OOC:resume()
 end
 
-function handlers:CHAT_MSG_ADDON(event, prefix, text, channel,sender,target,zoneChannelID,localID,name,instanceID)
+function handlers.CHAT_MSG_ADDON(event, prefix, text, channel,sender,target,zoneChannelID,localID,name,instanceID)
     if prefix ~= CHAN_PREFIX_BROADCAST then
         return
     end
@@ -437,7 +439,7 @@ function handlers:CHAT_MSG_ADDON(event, prefix, text, channel,sender,target,zone
     end
 end
 
-function handlers:PLAYER_REGEN_ENABLED()
+function handlers.PLAYER_REGEN_ENABLED()
     OOC:resume()
 end
 
@@ -451,4 +453,4 @@ SlashCmdList["BCAST"] = function(cmd)
     printerr("Unknown command " .. cmd)
     print("Usage\n  \'/bcast target' to broadcast your current target")
    end
-end 
+end

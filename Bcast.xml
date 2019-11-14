@@ -1,14 +1,15 @@
-<?xml version="1.0"?>
-<Ui xmlns="http://www.blizzard.com/wow/ui/" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-    <Script file="Bcast.lua"/>
+<?xml version="1.0" ?>
+<UI xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+    <Script file="Bcast.lua" />
     <Frame name="Bcast_Frame" frameStrata="HIGH" parent="UIParent" movable="true">
         <Size>
-            <AbsDimension x="100" y="100"/>
+            <AbsDimension x="100" y="100" />
         </Size>
         <Anchors>
             <Anchor point="TOP">
-
+                <Offset>
+                    <AbsDimension x="0" y="-30" />
+                </Offset>
             </Anchor>
         </Anchors>
         <Scripts>
@@ -17,15 +18,15 @@
         </Scripts>
         <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
             <TileSize>
-                <AbsValue val="16"/>
+                <AbsValue val="16" />
             </TileSize>
             <EdgeSize>
-                <AbsValue val="16"/>
+                <AbsValue val="16" />
             </EdgeSize>
             <BackgroundInsets>
-                <AbsInset left="4" right="3" top="4" bottom="3"/>
+                <AbsInset left="4" right="3" top="4" bottom="3" />
             </BackgroundInsets>
-            <Color r="0.2" g="0.2" b="0.2" a="0.7"/>
+            <Color r="0.2" g="0.2" b="0.2" a="0.7" />
         </Backdrop>
         <Layers>
             <Layer level="OVERLAY">
@@ -48,18 +49,67 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
+
+
             </Layer>
         </Layers>
         <Frames>
-            <Button inherits="UIPanelButtonTemplate" name="$parent_TargetButton" text="Target">
-                <Size x="50" y="20"/>
+            <Button name="$parent_TargetButton" inherits="SecureActionButtonTemplate,ActionButtonTemplate">
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="MyTexture" file="Interface/AddOns/Bcast/target-icon">
+                            <Size>
+                                <AbsDimension x="36" y="36" />
+                            </Size>
+                            <Anchors>
+                                <Anchor point="CENTER"></Anchor>
+                            </Anchors>
+
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Size x="40" y="40" />
                 <Anchors>
-                    <Anchor point="CENTER"/>
+                    <Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-2" />
+                        </Offset>
+                    </Anchor>
                 </Anchors>
                 <Scripts>
                     <OnClick>Bcast_BroadcastTarget();</OnClick>
                 </Scripts>
             </Button>
+
+
+            <Button name="BBB_BroadcastItem" virtual="true" inherits="SecureActionButtonTemplate,ActionButtonTemplate">
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture name="MyTexture" file="Interface/AddOns/Bcast/target-icon">
+                            <Size>
+                                <AbsDimension x="36" y="36" />
+                            </Size>
+                            <Anchors>
+                                <Anchor point="CENTER"></Anchor>
+                            </Anchors>
+
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Size x="40" y="40" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-2" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>Bcast_BroadcastTarget();</OnClick>
+                </Scripts>
+            </Button>
+
+
         </Frames>
     </Frame>
-</Ui>
+</UI>
